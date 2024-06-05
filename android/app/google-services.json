@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1009258253526",
+    "project_id": "careflix-b4f6a",
+    "storage_bucket": "careflix-b4f6a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1009258253526:android:22b4db02d8bd5bd41e8d77",
+        "android_client_info": {
+          "package_name": "com.example.careflix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBE6xlq0rAWzev4L_gu3QdsZKrs5wSlSc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1009258253526:android:1de5e7dc867264a81e8d77",
+        "android_client_info": {
+          "package_name": "com.example.careflix_parental_control"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBE6xlq0rAWzev4L_gu3QdsZKrs5wSlSc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
