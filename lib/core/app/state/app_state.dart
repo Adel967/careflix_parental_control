@@ -27,12 +27,12 @@ class AppState extends ChangeNotifier {
   }
 
   Future getRule() async {
-    //try {
+    try {
     _rule = await _ruleRepo.getRule();
     print(_rule);
     notifyListeners();
-    // } catch (e) {
-    //   print("error");
-    // }
+    } catch (e) {
+      print("error");
+    }
   }
 }
