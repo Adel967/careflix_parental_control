@@ -24,6 +24,7 @@ class TimeManagementScreen extends StatefulWidget {
 
 class _TimeManagementScreenState extends State<TimeManagementScreen> {
   final _ruleCubit = sl<RuleCubit>();
+  Rule? oldRule;
   RangeValues rangeValues = RangeValues(0, 24);
   List<DateTime> selectedDates = [];
   getTime(int time) {
@@ -36,7 +37,7 @@ class _TimeManagementScreenState extends State<TimeManagementScreen> {
       if (time > 12) {
         time -= 12;
       }
-      return "${time} Pm";
+      return "${time} ${time < 12 ? "Pm" : "Am"}";
     }
   }
 
@@ -94,16 +95,16 @@ class _TimeManagementScreenState extends State<TimeManagementScreen> {
   }
 
   setData(Rule? rule) {
+    print("sss");
     if (rule != null &&
-        (rangeValues.start != rule.openTime!.toDouble() ||
-            rangeValues.end != rule.closeTime!.toDouble() ||
-            selectedDates != rule.blockedDates)) {
+        (oldRule == null || (oldRule != null && oldRule != rule))) {
       rangeValues =
           RangeValues(rule.openTime!.toDouble(), rule.closeTime!.toDouble());
       selectedDates = rule.blockedDates!;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         setState(() {});
       });
+      oldRule = rule;
     }
   }
 
@@ -173,6 +174,7 @@ class _TimeManagementScreenState extends State<TimeManagementScreen> {
                             if (value.start == value.end) {
                               return;
                             }
+                            print("done");
                             setState(() {
                               rangeValues = value;
                             });

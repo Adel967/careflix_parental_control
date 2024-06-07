@@ -53,9 +53,8 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
             LoadingOverlay.of(context).show();
             controller!.pauseCamera();
           } else if (state is ConnectingLoaded) {
-            LoadingOverlay.of(context).hide();
             await Provider.of<AppState>(context, listen: false).init();
-
+            LoadingOverlay.of(context).hide();
             Navigator.of(context).pushNamedAndRemoveUntil(
                 RoutePaths.TimeManagementScreen, (route) => false);
           } else if (state is ConnectingError) {

@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
 import 'duration_rule.dart';
 
-class Rule {
+class Rule extends Equatable {
   int? openTime;
   int? closeTime;
   List<DateTime>? blockedDates;
@@ -61,4 +62,14 @@ class Rule {
       blockedShowsId: blockedShows ?? this.blockedShowsId,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        this.openTime,
+        this.closeTime,
+        this.blockedDates,
+        this.durationRules,
+        this.blockedCategories,
+        this.blockedShowsId
+      ];
 }
