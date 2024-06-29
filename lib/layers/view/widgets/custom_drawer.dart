@@ -38,6 +38,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
           title: "Block specific show",
           function: () => Navigator.of(context)
               .pushReplacementNamed(RoutePaths.BlockScreen)),
+      DrawerOption(
+          icon: Icons.offline_bolt_sharp,
+          title: "App Status",
+          function: () => Navigator.of(context)
+              .pushReplacementNamed(RoutePaths.AppStatusScreen)),
     ];
   }
 

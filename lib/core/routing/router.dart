@@ -9,6 +9,7 @@ import 'package:careflix_parental_control/layers/view/qr_code_scanner/qr_code_sc
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../layers/view/intro/splash_screen.dart';
+import '../../layers/view/parental_control/app_status_screen.dart';
 
 class AppRouter {
   static Route generateRoute(RouteSettings settings) {
@@ -30,6 +31,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => BlockScreen());
       case RoutePaths.SearchBlockScreen:
         return MaterialPageRoute(builder: (_) => SearchBlockScreen());
+      case RoutePaths.AppStatusScreen:
+        return MaterialPageRoute(builder: (_) => AppStatusScreen());
 
       default:
         return MaterialPageRoute(

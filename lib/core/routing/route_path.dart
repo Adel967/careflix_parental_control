@@ -7,4 +7,5 @@ class RoutePaths {
   static const DurationRuleCreator = '/DurationRuleCreator';
   static const BlockScreen = '/BlockScreen';
   static const SearchBlockScreen = '/SearchBlockScreen';
+  static const AppStatusScreen = '/AppStatusScreen';
 }

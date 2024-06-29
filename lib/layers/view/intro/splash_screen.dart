@@ -8,10 +8,12 @@ import 'package:provider/provider.dart';
 import '../../../core/app/state/app_state.dart';
 import '../../../core/configuration/assets.dart';
 import '../../../core/configuration/styles.dart';
+import '../../../core/constants.dart';
 import '../../../core/shared_preferences/shared_preferences_instance.dart';
 import '../../../core/shared_preferences/shared_preferences_key.dart';
 import '../../../core/utils/size_config.dart';
 import '../../../injection_container.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,9 +23,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<Color?> _animation;
+    with TickerProviderStateMixin {
+  late AnimationController _backgroundAnimationController;
+  late AnimationController _textAnimationController;
+  late AnimationController _controller;
+  late AnimationController _imageAnimation;
+  late Animation<Color?> _animationColorBg;
+  late Animation<int> _characterCount;
+  late Animation<double> _imageHeight;
 
   @override
   void initState() {
@@ -32,24 +39,68 @@ class _SplashScreenState extends State<SplashScreen>
     _navigateAfterDelay();
   }
 
-  void _initializeAnimation() {
-    _animationController = AnimationController(
+  void _initializeBackgroundAnimation() {
+    _backgroundAnimationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
     );
-    _animation = ColorTween(
+    _animationColorBg = ColorTween(
       begin: Styles.colorPrimary,
       end: Styles.backgroundColor,
-    ).animate(_animationController);
+    ).animate(_backgroundAnimationController);
+  }
 
-    _animationController.forward();
-    _animationController.addListener(() {
+  void _initializeTextAnimation() {
+    _textAnimationController = new AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _characterCount = new StepTween(begin: 0, end: Constants.appName.length)
+        .animate(new CurvedAnimation(
+            parent: _textAnimationController, curve: Curves.easeIn));
+  }
+
+  void _initializeImageAnimation() {
+    _imageAnimation = new AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+
+    _imageHeight = new Tween(begin: 130.0, end: 40.0).animate(_imageAnimation);
+  }
+
+  void _initializeAnimation() async {
+    _initializeBackgroundAnimation();
+    _initializeTextAnimation();
+    _initializeImageAnimation();
+
+    _backgroundAnimationController.forward();
+
+    _backgroundAnimationController.addListener(() {
       setState(() {});
     });
+
+    _backgroundAnimationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _imageAnimation.forward();
+      }
+    });
+
+    _imageHeight.addListener(() {
+      setState(() {});
+    });
+
+    _controller = AnimationController(vsync: this)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _textAnimationController.forward();
+        }
+      });
   }
 
   Future<void> _navigateAfterDelay() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 4));
 
     final userId = await SharedPreferencesInstance.pref
         .getString(SharedPreferencesKeys.UserId);
@@ -61,34 +112,7 @@ class _SplashScreenState extends State<SplashScreen>
     } else {
       Navigator.of(context).pushReplacementNamed(RoutePaths.QrCodeRequest);
     }
-    // User? user = FirebaseAuth.instance.currentUser;
-    //
-    // if (user != null) {
-    //   _navigateBasedOnUserProfile(user);
-    // } else {
-    //   _navigateBasedOnFirstTime();
-    // }
   }
-
-  // void _navigateBasedOnUserProfile(User user) async {
-  //   if (user.displayName != null && user.displayName!.isNotEmpty) {
-  //     await Provider.of<AppState>(context, listen: false).init();
-  //     _navigateTo(RoutePaths.Home);
-  //   } else {
-  //     _navigateTo(RoutePaths.SetUpProfileScreen);
-  //   }
-  // }
-  //
-  // void _navigateBasedOnFirstTime() {
-  //   bool? isFirstTime = SharedPreferencesInstance.pref
-  //       .getBool(SharedPreferencesKeys.FIRST_TIME_KEY);
-  //
-  //   if (isFirstTime == null || isFirstTime) {
-  //     _navigateTo(RoutePaths.OnBoardingScreen);
-  //   } else {
-  //     _navigateTo(RoutePaths.LogIn);
-  //   }
-  // }
 
   void _navigateTo(String route) {
     Navigator.of(context).pushNamedAndRemoveUntil(route, (route) => false);
@@ -96,7 +120,6 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void dispose() {
-    _animationController.dispose();
     super.dispose();
   }
 
@@ -105,9 +128,62 @@ class _SplashScreenState extends State<SplashScreen>
     SizeConfig().init(context);
 
     return Scaffold(
-      backgroundColor: _animation.value,
+      backgroundColor: _animationColorBg.value,
       body: Center(
-        child: Image.asset(AssetsLink.APP_LOGO),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              textDirection: TextDirection.ltr,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  height: _imageHeight.value,
+                  AssetsLink.APP_LOGO,
+                ),
+                CommonSizes.hSmallSpace,
+                Container(
+                  color: Colors.white,
+                  height: 20,
+                  width: 2,
+                ).animate(controller: _controller).scaleY(
+                    delay: Duration(milliseconds: 1400),
+                    duration: Duration(milliseconds: 300),
+                    begin: 0,
+                    end: 1.5),
+                CommonSizes.hSmallSpace,
+                _characterCount == null
+                    ? SizedBox()
+                    : AnimatedBuilder(
+                        animation: _characterCount,
+                        builder: (context, child) {
+                          String text = Constants.appName
+                              .substring(0, _characterCount.value);
+                          return Text(
+                            text,
+                            style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          );
+                        },
+                      )
+              ],
+            ),
+            CommonSizes.vSmallSpace,
+            Text("Where Entertainment Meets Safety")
+                .animate()
+                .fadeIn(
+                  delay: Duration(milliseconds: 2600),
+                  duration: Duration(milliseconds: 500),
+                )
+                .slideY(
+                    delay: Duration(milliseconds: 2600),
+                    duration: Duration(milliseconds: 700),
+                    begin: 0.5,
+                    end: 0)
+          ],
+        ),
       ),
     );
   }

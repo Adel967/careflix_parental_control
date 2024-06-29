@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'core/configuration/styles.dart';
 import 'core/routing/route_path.dart';
 import 'core/routing/router.dart';
+import 'core/services/assets_loader.dart';
 import 'firebase_options.dart';
 import 'generated/l10n.dart';
 import 'injection_container.dart';
@@ -23,6 +24,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  AssetsLoader.initAssetsLoaders();
+
   runApp(const MyApp());
 }
 

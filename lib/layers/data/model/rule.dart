@@ -10,14 +10,17 @@ class Rule extends Equatable {
   List<DurationRule>? durationRules;
   List<String>? blockedCategories;
   List<String>? blockedShowsId;
+  bool? isOn;
 
-  Rule(
-      {this.openTime,
-      this.closeTime,
-      this.blockedDates,
-      this.durationRules,
-      this.blockedCategories,
-      this.blockedShowsId});
+  Rule({
+    this.openTime,
+    this.closeTime,
+    this.blockedDates,
+    this.durationRules,
+    this.blockedCategories,
+    this.blockedShowsId,
+    this.isOn,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -29,6 +32,7 @@ class Rule extends Equatable {
           : [],
       'blockedCategories': this.blockedCategories ?? [],
       'blockedShows': this.blockedShowsId ?? [],
+      'isOn': this.isOn ?? true
     };
   }
 
@@ -42,6 +46,7 @@ class Rule extends Equatable {
           map['durationRules'].map((e) => DurationRule.fromString(e)).toList()),
       blockedCategories: List<String>.from(map['blockedCategories']),
       blockedShowsId: List<String>.from(map['blockedShows']),
+      isOn: map['isOn'],
     );
   }
 
@@ -52,6 +57,7 @@ class Rule extends Equatable {
     List<DurationRule>? durationRules,
     List<String>? blockedCategories,
     List<String>? blockedShows,
+    bool? isOn,
   }) {
     return Rule(
       openTime: openTime ?? this.openTime,
@@ -60,6 +66,7 @@ class Rule extends Equatable {
       durationRules: durationRules ?? this.durationRules,
       blockedCategories: blockedCategories ?? this.blockedCategories,
       blockedShowsId: blockedShows ?? this.blockedShowsId,
+      isOn: isOn ?? this.isOn,
     );
   }
 

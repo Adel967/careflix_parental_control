@@ -20,4 +20,5 @@ class AssetsLink {
   /// rive
   static const DayNightButton = "assets/animations/rive/day_night_button.riv";
   static const QrCodeScanner = "assets/animations/rive/qr_scanner.riv";
+  static const OnOffButton = "assets/animations/rive/onOffButton.riv";
 }
