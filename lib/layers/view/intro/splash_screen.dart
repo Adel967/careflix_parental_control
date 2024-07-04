@@ -51,18 +51,18 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _initializeTextAnimation() {
-    _textAnimationController = new AnimationController(
+    _textAnimationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
 
-    _characterCount = new StepTween(begin: 0, end: Constants.appName.length)
-        .animate(new CurvedAnimation(
+    _characterCount = StepTween(begin: 0, end: Constants.appName.length)
+        .animate(CurvedAnimation(
             parent: _textAnimationController, curve: Curves.easeIn));
   }
 
   void _initializeImageAnimation() {
-    _imageAnimation = new AnimationController(
+    _imageAnimation = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );

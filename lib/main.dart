@@ -44,6 +44,9 @@ class MyApp extends StatelessWidget {
         final localizationProvider = Provider.of<LocaleProvider>(context);
 
         return ScreenUtilInit(
+          designSize: Size(1080, 1920),
+          minTextAdapt: true,
+          useInheritedMediaQuery: true,
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',

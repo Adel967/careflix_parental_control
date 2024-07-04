@@ -46,7 +46,7 @@ class _AppStatusScreenState extends State<AppStatusScreen> {
       artboard.addController(controller);
       _isPressed = controller.findInput('push')!;
     }
-    _isPressed.change(rule!.isOn ?? true);
+    _isPressed.change(rule != null ? rule.isOn ?? true : true);
 
     setState(() {
       _bearArtboard = artboard;
